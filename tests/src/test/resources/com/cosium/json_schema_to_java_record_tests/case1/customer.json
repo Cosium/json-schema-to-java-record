@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "customer",
+  "type": "object",
+  "properties": {
+    "firstName": {
+      "type": "string"
+    },
+    "lastName": {
+      "type": "string"
+    },
+    "address": {
+      "$ref": "classpath:/com/cosium/json_schema_to_java_record_tests/case1/address.json"
+    }
+  },
+  "required": [ "firstName", "lastName" ]
+}
