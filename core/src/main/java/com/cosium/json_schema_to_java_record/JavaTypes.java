@@ -108,7 +108,8 @@ class JavaTypes implements AutoCloseable {
 
     FieldSpec classBySchemaIdField =
         FieldSpec.builder(
-                ParameterizedTypeName.get(Map.class, String.class, Class.class), "classBySchemaId")
+                ParameterizedTypeName.get(Map.class, String.class, Class.class),
+                "CLASS_BY_SCHEMA_ID")
             .addModifiers(Modifier.PUBLIC)
             .addModifiers(Modifier.STATIC)
             .addModifiers(Modifier.FINAL)
