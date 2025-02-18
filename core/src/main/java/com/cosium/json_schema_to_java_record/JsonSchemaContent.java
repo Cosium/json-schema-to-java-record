@@ -156,8 +156,17 @@ record JsonSchemaContent(
         constructorBuilder.addParameter(parameterSpecBuilder.build());
 
         if (!propertyType.isPrimitive() && required.contains(propertyName)) {
-          compactConstructorBuilder.addStatement(
-              "$T.requireNonNull($N)", Objects.class, propertyName);
+          if (isList(propertyType)) {
+            compactConstructorBuilder.addStatement(
+                "$N = $T.ofNullable($N).orElseGet($T::of)",
+                propertyName,
+                Optional.class,
+                propertyName,
+                List.class);
+          } else {
+            compactConstructorBuilder.addStatement(
+                "$T.requireNonNull($N)", Objects.class, propertyName);
+          }
         }
       }
       typeBuilder
@@ -179,6 +188,18 @@ record JsonSchemaContent(
     javaTypes.write($id, className.packageName(), typeBuilder);
 
     return className;
+  }
+
+  private boolean isList(TypeName type) {
+    ClassName className;
+    if (type instanceof ClassName classNameCandidate) {
+      className = classNameCandidate;
+    } else if (type instanceof ParameterizedTypeName parameterizedTypeName) {
+      className = parameterizedTypeName.rawType();
+    } else {
+      return false;
+    }
+    return className.canonicalName().equals(List.class.getCanonicalName());
   }
 
   private void addJsonRelatedAnnotations(

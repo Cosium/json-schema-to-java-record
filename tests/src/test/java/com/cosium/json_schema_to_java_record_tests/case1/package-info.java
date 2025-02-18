@@ -5,8 +5,11 @@
     schemaRootFileLocations =
         @JsonSchemaFileLocation(
             moduleAndPackage = "com.cosium.json_schema_to_java_record_tests.case1",
-            relativeName = "customer.json"),
+            relativeName = "customers.json"),
     schemaConfigurations = {
+      @JsonSchemaConfiguration(
+          schemaId = "customers",
+          javaTypeQualifiedName = "com.cosium.json_schema_to_java_record_tests.case1.Customers"),
       @JsonSchemaConfiguration(
           schemaId = "customer",
           javaTypeQualifiedName = "com.cosium.json_schema_to_java_record_tests.case1.Customer"),
