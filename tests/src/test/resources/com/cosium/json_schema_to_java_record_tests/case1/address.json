@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "address",
+  "type": "object",
+  "properties": {
+    "streetNumber": {
+      "type": "integer"
+    },
+    "streetName": {
+      "type": "string"
+    },
+    "country": {
+      "$ref": "classpath:/com/cosium/json_schema_to_java_record_tests/case1/country.json"
+    }
+  },
+  "required": [ "streetNumber", "streetName" ]
+}
