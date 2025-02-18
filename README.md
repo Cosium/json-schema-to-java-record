@@ -7,34 +7,20 @@ An annotation processor converting JSON schemas to java records.
 
 # Quick start
 
-1. Import the BOM:
-   ```xml
-   <dependencyManagement>
-     <dependencies>
-       <!-- ... -->
-       <dependency>
-         <groupId>com.cosium.json_schema_to_java_record</groupId>
-         <artifactId>json-schema-to-java-record-bom</artifactId>
-         <version>${json-schema-to-java-record.version}</version>
-         <scope>import</scope>
-         <type>pom</type>
-       </dependency>
-       <!-- ... -->
-     </dependencies>
-   </dependencyManagement>
-   ```
-2. Import the API:
+1. Import the API:
    ```xml
    <dependencies>
      <!-- ... -->
      <dependency>
        <groupId>com.cosium.json_schema_to_java_record</groupId>
        <artifactId>json-schema-to-java-record-api</artifactId>
+       <version>${json-schema-to-java-record.version}</version>
+       <scope>provided</scope>
      </dependency>
      <!-- ... -->
    </dependencies>
    ```
-3. Import the annotation processor:
+2. Import the annotation processor:
    ```xml
    <plugin>
      <groupId>org.apache.maven.plugins</groupId>
@@ -44,17 +30,18 @@ An annotation processor converting JSON schemas to java records.
          <path>
            <groupId>com.cosium.json_schema_to_java_record</groupId>
            <artifactId>json-schema-to-java-record</artifactId>
+           <version>${json-schema-to-java-record.version}</version>
          </path>
        </annotationProcessorPaths>
      </configuration>
    </plugin>
    ```
-4. Add your JSON schema files to the class path:
+3. Add your JSON schema files to the class path:
    ```
    src/main/resources/com/aqme
    └── foo.schema.json
    ```
-5. Annotate a `package-info.java` file like this:
+4. Annotate a `package-info.java` file like this:
    ```java
    @GenerateRecordsFromJsonSchemas(
      schemaRootFileLocations =
@@ -69,4 +56,4 @@ An annotation processor converting JSON schemas to java records.
    import com.cosium.json_schema_to_java_record_api.JsonSchemaConfiguration;
    import com.cosium.json_schema_to_java_record_api.JsonSchemaFileLocation;
    ```
-6. Compile to generate the java files
+5. Compile to generate the java files

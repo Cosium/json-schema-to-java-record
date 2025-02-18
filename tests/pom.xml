@@ -16,7 +16,7 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>json-schema-to-java-record-api</artifactId>
       <version>${project.version}</version>
-      <scope>test</scope>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
