@@ -15,6 +15,7 @@ import java.net.URI;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import javax.lang.model.element.Modifier;
@@ -127,7 +128,9 @@ record JsonSchemaContent(
     } else {
       typeBuilder = TypeSpec.recordBuilder(className).addModifiers(Modifier.PUBLIC);
 
-      MethodSpec.Builder recordConstructorBuilder = MethodSpec.constructorBuilder();
+      MethodSpec.Builder constructorBuilder = MethodSpec.constructorBuilder();
+      MethodSpec.Builder compactConstructorBuilder =
+          MethodSpec.compactConstructorBuilder().addModifiers(Modifier.PUBLIC);
 
       for (Map.Entry<String, JsonSchemaContent> property : properties().entrySet()) {
 
@@ -150,11 +153,17 @@ record JsonSchemaContent(
           addNullRelatedAnnotations(javaTypes, parameterSpecBuilder, propertyName);
         }
 
-        ParameterSpec parameterSpec = parameterSpecBuilder.build();
+        constructorBuilder.addParameter(parameterSpecBuilder.build());
 
-        recordConstructorBuilder.addParameter(parameterSpec);
-        typeBuilder.recordConstructor(recordConstructorBuilder.build());
+        if (!propertyType.isPrimitive() && required.contains(propertyName)) {
+          compactConstructorBuilder.addStatement(
+              "$T.requireNonNull($N)", Objects.class, propertyName);
+        }
       }
+      typeBuilder
+          .recordConstructor(constructorBuilder.build())
+          .addMethod(compactConstructorBuilder.build());
+
       addRecordBuilderRelatedAnnotations(javaTypes, typeBuilder);
       addJsonRelatedAnnotations(typeBuilder);
     }
