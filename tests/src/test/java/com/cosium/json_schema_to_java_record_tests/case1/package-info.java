@@ -18,7 +18,8 @@
           javaTypeQualifiedName = "com.cosium.json_schema_to_java_record_tests.case1.Country",
           javaInterfaceQualifiedNames =
               "com.cosium.json_schema_to_java_record_tests.case1.Location"),
-    })
+    },
+    reportClassQualifiedName = "com.cosium.json_schema_to_java_record_tests.case1.Report")
 package com.cosium.json_schema_to_java_record_tests.case1;
 
 import com.cosium.json_schema_to_java_record_api.GenerateRecordsFromJsonSchemas;

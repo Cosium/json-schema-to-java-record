@@ -167,7 +167,7 @@ record JsonSchemaContent(
         .map(ClassName::bestGuess)
         .forEach(typeBuilder::addSuperinterface);
 
-    javaTypes.write(className.packageName(), typeBuilder);
+    javaTypes.write($id, className.packageName(), typeBuilder);
 
     return className;
   }

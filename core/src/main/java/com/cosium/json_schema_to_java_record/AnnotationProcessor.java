@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
@@ -28,13 +29,13 @@ public class AnnotationProcessor extends AbstractLoggingProcessor {
 
   private final Set<Command> processedCommands = new CopyOnWriteArraySet<>();
 
-  @Nullable private JavaTypes javaTypes;
+  @Nullable private Filer filer;
   @Nullable private JsonSchemas jsonSchemas;
 
   @Override
   public synchronized void init(ProcessingEnvironment processingEnv) {
     super.init(processingEnv);
-    this.javaTypes = new JavaTypes(processingEnv.getFiler());
+    this.filer = processingEnv.getFiler();
     jsonSchemas = new JsonSchemas(new ReadonlyClassPathResources(processingEnv.getFiler()));
   }
 
@@ -55,7 +56,7 @@ public class AnnotationProcessor extends AbstractLoggingProcessor {
 
     commands.stream()
         .peek(command -> LOGGER.debug("Executing {}", command))
-        .forEach(command -> command.execute(javaTypes, jsonSchemas));
+        .forEach(command -> command.execute(filer, jsonSchemas));
 
     processedCommands.addAll(commands);
 

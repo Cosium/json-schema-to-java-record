@@ -12,4 +12,9 @@ public @interface GenerateRecordsFromJsonSchemas {
   JsonSchemaFileLocation[] schemaRootFileLocations();
 
   JsonSchemaConfiguration[] schemaConfigurations() default {};
+
+  /**
+   * @return A non-empty string to generate a report class. Empty otherwise.
+   */
+  String reportClassQualifiedName() default "";
 }
