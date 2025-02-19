@@ -273,10 +273,6 @@ Example of configuration:
   reportClassQualifiedName = "com.cosium.json_schema_to_java_record_tests.case1.Report"   
 )
 package com.aqme;
-   
-import com.cosium.json_schema_to_java_record_api.GenerateRecordsFromJsonSchemas;
-import com.cosium.json_schema_to_java_record_api.JsonSchemaFileLocation;
-
 ```
 
 Example of generated report class:
