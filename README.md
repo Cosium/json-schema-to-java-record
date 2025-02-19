@@ -39,7 +39,26 @@ An annotation processor converting JSON schemas to java records.
 3. Add your JSON schema files to the class path:
    ```
    src/main/resources/com/aqme
-   └── foo.schema.json
+   └── customer.json
+   ```
+   ```json
+   {
+     "$schema": "https://json-schema.org/draft/2020-12/schema",
+     "$id": "customer",
+     "type": "object",
+     "properties": {
+       "firstName": {
+         "type": "string"
+       },
+       "lastName": {
+         "type": "string"
+       }
+     },
+     "required": [
+       "firstName",
+       "lastName"
+     ]
+   }
    ```
 4. Annotate a `package-info.java` file like this:
    ```java
@@ -47,7 +66,7 @@ An annotation processor converting JSON schemas to java records.
      schemaRootFileLocations =
      @JsonSchemaFileLocation(
        moduleAndPackage = "com.aqme",
-       relativeName = "foo.schema.json"
+       relativeName = "customer.json"
      )
    )
    package com.aqme;
@@ -56,7 +75,28 @@ An annotation processor converting JSON schemas to java records.
    import com.cosium.json_schema_to_java_record_api.JsonSchemaConfiguration;
    import com.cosium.json_schema_to_java_record_api.JsonSchemaFileLocation;
    ```
-5. Compile to generate the java files
+5. Compile to generate this kind of output:
+   ```java
+   package com.aqme;
+   
+   import com.fasterxml.jackson.annotation.JsonInclude;
+   import com.fasterxml.jackson.annotation.JsonProperty;
+   import java.util.Objects;
+   import javax.annotation.processing.Generated;
+   import org.jspecify.annotations.NonNull;
+   import org.jspecify.annotations.Nullable;
+   
+   @JsonInclude(JsonInclude.Include.NON_NULL)
+   @Generated("com.cosium.json_schema_to_java_record_api.GenerateRecordsFromJsonSchemas")
+   public record Customer(
+       @JsonProperty("firstName") @NonNull String firstName,
+       @JsonProperty("lastName") @NonNull String lastName) {
+     public Customer {
+       Objects.requireNonNull(firstName);
+       Objects.requireNonNull(lastName);
+     }
+   }
+   ```
 
 # Type mapping
 
@@ -81,7 +121,7 @@ A schema having a non-null `enum` array will be converted to a java enum.
 
 # Java JSON binding
 
-Record components will be annotated with [Jackson annotations](https://github.com/FasterXML/jackson-annotations)
+Record components will be annotated with [Jackson annotations](https://github.com/FasterXML/jackson-annotations) .
 
 # Nullability
 
