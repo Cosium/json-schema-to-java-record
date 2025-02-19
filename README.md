@@ -100,20 +100,20 @@ An annotation processor converting JSON schemas to java records.
 
 # Type mapping
 
-| JSON `type` | JSON `format` | JSON required | Java type               |
-|-------------|---------------|---------------|-------------------------|
-| object      |               |               | A java record           |
-| string      | date-time     |               | java.time.ZonedDateTime |
-| string      | uri           |               | java.net.URI            |
-| string      |               |               | java.lang.String        |
-| array       |               |               | java.util.List          |
-| number      |               | required      | double                  |
-| number      |               | non required  | java.lang.Double        |
-| integer     |               | required      | int                     |
-| integer     |               | non required  | java.lang.Integer       |
-| boolean     |               | required      | boolean                 |
-| boolean     |               | non required  | java.lang.Boolean       |
-| null        |               |               | java.lang.Void          |
+| JSON `type` | JSON `format` | JSON required | Java type                |
+|-------------|---------------|---------------|--------------------------|
+| object      |               |               | A java record            |
+| string      | date-time     |               | java.time.ZonedDateTime  |
+| string      | uri           |               | java.net.URI             |
+| string      |               |               | java.lang.String         |
+| array       |               |               | Immutable java.util.List |
+| number      |               | required      | double                   |
+| number      |               | non required  | java.lang.Double         |
+| integer     |               | required      | int                      |
+| integer     |               | non required  | java.lang.Integer        |
+| boolean     |               | required      | boolean                  |
+| boolean     |               | non required  | java.lang.Boolean        |
+| null        |               |               | java.lang.Void           |
 
 # JSON enum
 
