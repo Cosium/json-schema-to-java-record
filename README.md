@@ -95,6 +95,8 @@ they will be used to annotate generated java record components.
 
 ## Array
 
+A non-null `array` will default to an empty immutable `java.util.List`.   
+
 # Builder
 
 ## RecordBuilder
