@@ -122,9 +122,9 @@ record JsonSchemaContent(
     }
 
     TypeSpec.Builder typeBuilder;
-    if (enumeration() != null) {
+    if (enumeration != null) {
       typeBuilder = TypeSpec.enumBuilder(className).addModifiers(Modifier.PUBLIC);
-      enumeration().stream().map(String::valueOf).forEach(typeBuilder::addEnumConstant);
+      enumeration.stream().map(String::valueOf).forEach(typeBuilder::addEnumConstant);
     } else {
       typeBuilder = TypeSpec.recordBuilder(className).addModifiers(Modifier.PUBLIC);
 
