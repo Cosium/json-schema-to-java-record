@@ -206,9 +206,10 @@ import javax.annotation.processing.Generated;
 
 @Generated("com.cosium.json_schema_to_java_record_api.GenerateRecordsFromJsonSchemas")
 public enum Country {
-  MOROCCO,
-  FRANCE
+  FRANCE,
+  MOROCCO
 }
+
 ```
 
 ## Making a generated type implement interfaces
@@ -248,8 +249,8 @@ import javax.annotation.processing.Generated;
 
 @Generated("com.cosium.json_schema_to_java_record_api.GenerateRecordsFromJsonSchemas")
 public enum Country implements Location {
-  MOROCCO,
-  FRANCE
+   FRANCE,
+   MOROCCO
 }
 ```
 

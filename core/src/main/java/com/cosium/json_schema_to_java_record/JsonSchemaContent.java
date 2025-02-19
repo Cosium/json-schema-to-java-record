@@ -33,7 +33,7 @@ record JsonSchemaContent(
     Type type,
     @Nullable String format,
     @Nullable JsonSchemaContent items,
-    @Nullable Set<Object> enumeration,
+    @Nullable List<Object> enumeration,
     Map<String, JsonSchemaContent> properties,
     Set<String> required) {
 
@@ -46,7 +46,7 @@ record JsonSchemaContent(
       @JsonProperty("type") @Nullable String type,
       @JsonProperty("format") @Nullable String format,
       @JsonProperty("items") @Nullable JsonSchemaContent items,
-      @JsonProperty("enum") @Nullable Set<Object> enumeration,
+      @JsonProperty("enum") @Nullable List<Object> enumeration,
       @JsonProperty("properties") @Nullable Map<String, JsonSchemaContent> properties,
       @JsonProperty("required") @Nullable Set<String> required) {
     this(
