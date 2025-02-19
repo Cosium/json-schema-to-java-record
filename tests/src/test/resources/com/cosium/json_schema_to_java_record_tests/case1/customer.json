@@ -11,6 +11,12 @@
     },
     "address": {
       "$ref": "classpath:/com/cosium/json_schema_to_java_record_tests/case1/address.json"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
     }
   },
   "required": [ "firstName", "lastName" ]
