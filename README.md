@@ -123,3 +123,135 @@ All `$ref` values should start with `classpath:`, followed by the absolute path 
   }
 }
 ```
+
+# Customization
+
+Most customizations rely on the JSON schema `$id` attribute (aka `schemaId` on the java API side).
+Make sure this attribute is valued and unique to benefit from customizations using it.
+
+## Forcing the Java type qualified name of a particular schema
+
+You can ask a particular `schemaId`
+to be bound to an explicit Java type qualified name via `JsonSchemaConfiguration#javaTypeQualifiedName`.
+
+Example of JSON schema `country.json`:
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "country",
+  "enum": ["FRANCE", "MOROCCO"]
+}
+```
+
+Example of configuration:
+```java
+@GenerateRecordsFromJsonSchemas(
+    schemaRootFileLocations =
+        @JsonSchemaFileLocation(
+            moduleAndPackage = "com.cosium.json_schema_to_java_record_tests.case1",
+            relativeName = "country.json"),
+    schemaConfigurations = 
+      @JsonSchemaConfiguration(
+          schemaId = "country",
+          javaTypeQualifiedName = "com.cosium.json_schema_to_java_record_tests.case1.Country")
+    )
+package com.cosium.json_schema_to_java_record_tests.case1;
+```
+
+Example of generated java class:
+```java
+package com.cosium.json_schema_to_java_record_tests.case1;
+
+import javax.annotation.processing.Generated;
+
+@Generated("com.cosium.json_schema_to_java_record_api.GenerateRecordsFromJsonSchemas")
+public enum Country {
+  MOROCCO,
+  FRANCE
+}
+```
+
+## Making a generated type implement interfaces
+
+You can ask a generated Java type
+to implement a list of interfaces via `JsonSchemaConfiguration#javaInterfaceQualifiedNames`.
+
+Example of JSON schema `country.json`:
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "country",
+  "enum": ["FRANCE", "MOROCCO"]
+}
+```
+
+Example of configuration:
+```java
+@GenerateRecordsFromJsonSchemas(
+    schemaRootFileLocations =
+        @JsonSchemaFileLocation(
+            moduleAndPackage = "com.cosium.json_schema_to_java_record_tests.case1",
+            relativeName = "country.json"),
+    schemaConfigurations =
+    @JsonSchemaConfiguration(
+            schemaId = "country",
+            javaInterfaceQualifiedNames =
+                    "com.cosium.json_schema_to_java_record_tests.case1.Location")
+    )
+package com.cosium.json_schema_to_java_record_tests.case1;
+```
+
+Example of generated java class:
+```java
+import com.cosium.json_schema_to_java_record_tests.case1.Location;
+import javax.annotation.processing.Generated;
+
+@Generated("com.cosium.json_schema_to_java_record_api.GenerateRecordsFromJsonSchemas")
+public enum Country implements Location {
+  MOROCCO,
+  FRANCE
+}
+```
+
+## Report generation
+
+You can ask for the creation of a Java class generation report
+by providing a non-empty value to `GenerateRecordsFromJsonSchemas#reportClassQualifiedName`.
+
+The generated report class will contain:
+- A public constant `Map<String, Class> CLASS_BY_SCHEMA_ID` mapping each generated class to its JSON schema `$id`. If the latter was missing, there will be no entry in the Map.
+
+Example of configuration:
+```java
+@GenerateRecordsFromJsonSchemas(
+  schemaRootFileLocations =
+    @JsonSchemaFileLocation(
+      moduleAndPackage = "com.cosium.json_schema_to_java_record_tests.case1",
+      relativeName = "customers.json"
+    ),
+  reportClassQualifiedName = "com.cosium.json_schema_to_java_record_tests.case1.Report"   
+)
+package com.aqme;
+   
+import com.cosium.json_schema_to_java_record_api.GenerateRecordsFromJsonSchemas;
+import com.cosium.json_schema_to_java_record_api.JsonSchemaFileLocation;
+
+```
+
+Example of generated report class:
+```java
+package com.cosium.json_schema_to_java_record_tests.case1;
+
+import java.lang.Class;
+import java.lang.String;
+import java.util.Map;
+import javax.annotation.processing.Generated;
+
+@Generated("com.cosium.json_schema_to_java_record_api.GenerateRecordsFromJsonSchemas")
+public final class Report {
+  public static final Map<String, Class> CLASS_BY_SCHEMA_ID = Map.ofEntries(Map.entry("country",Country.class),Map.entry("address",Address.class),Map.entry("customers",Customers.class),Map.entry("customer",Customer.class));
+
+  private Report() {
+  }
+}
+```
