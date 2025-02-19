@@ -155,18 +155,27 @@ record JsonSchemaContent(
 
         constructorBuilder.addParameter(parameterSpecBuilder.build());
 
-        if (!propertyType.isPrimitive() && required.contains(propertyName)) {
-          if (isList(propertyType)) {
+        boolean nonNull = required.contains(propertyName);
+        if (isList(propertyType)) {
+          if (nonNull) {
             compactConstructorBuilder.addStatement(
-                "$N = $T.ofNullable($N).orElseGet($T::of)",
+                "$N = $T.ofNullable($N).map($T::copyOf).orElseGet($T::of)",
+                propertyName,
+                Optional.class,
+                propertyName,
+                List.class,
+                List.class);
+          } else {
+            compactConstructorBuilder.addStatement(
+                "$N = $T.ofNullable($N).map($T::copyOf).orElse(null)",
                 propertyName,
                 Optional.class,
                 propertyName,
                 List.class);
-          } else {
-            compactConstructorBuilder.addStatement(
-                "$T.requireNonNull($N)", Objects.class, propertyName);
           }
+        } else if (!propertyType.isPrimitive() && nonNull) {
+          compactConstructorBuilder.addStatement(
+              "$T.requireNonNull($N)", Objects.class, propertyName);
         }
       }
       typeBuilder
