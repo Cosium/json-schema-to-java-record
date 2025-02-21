@@ -1,5 +1,5 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$schema": "https://json-schema.org/draft-06/schema",
   "$id": "address",
   "type": "object",
   "properties": {
@@ -11,6 +11,9 @@
     },
     "country": {
       "$ref": "classpath:/com/cosium/json_schema_to_java_record_tests/case1/country.json"
+    },
+    "planet": {
+      "const": "earth"
     }
   },
   "required": [ "streetNumber", "streetName" ]

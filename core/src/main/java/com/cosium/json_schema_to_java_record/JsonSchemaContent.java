@@ -35,7 +35,8 @@ record JsonSchemaContent(
     @Nullable JsonSchemaContent items,
     @Nullable List<Object> enumeration,
     Map<String, JsonSchemaContent> properties,
-    Set<String> required) {
+    Set<String> required,
+    @Nullable String constValue) {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(JsonSchemaContent.class);
 
@@ -48,7 +49,8 @@ record JsonSchemaContent(
       @JsonProperty("items") @Nullable JsonSchemaContent items,
       @JsonProperty("enum") @Nullable List<Object> enumeration,
       @JsonProperty("properties") @Nullable Map<String, JsonSchemaContent> properties,
-      @JsonProperty("required") @Nullable Set<String> required) {
+      @JsonProperty("required") @Nullable Set<String> required,
+      @JsonProperty("const") @Nullable String constValue) {
     this(
         $schema,
         $id,
@@ -57,7 +59,8 @@ record JsonSchemaContent(
         items,
         enumeration,
         Optional.ofNullable(properties).orElseGet(Map::of),
-        Optional.ofNullable(required).orElseGet(Set::of));
+        Optional.ofNullable(required).orElseGet(Set::of),
+        constValue);
   }
 
   public TypeName writeJavaType(
@@ -65,6 +68,10 @@ record JsonSchemaContent(
       Configuration configuration,
       ClassName fallbackClassName,
       boolean preferPrimitive) {
+
+    if (constValue != null) {
+      return ClassName.get(String.class);
+    }
 
     final TypeName processedTypeName =
         switch (type()) {
@@ -136,6 +143,20 @@ record JsonSchemaContent(
 
         String propertyName = property.getKey();
         JsonSchemaContent propertySchema = property.getValue();
+
+        String propertyConstValue = propertySchema.constValue();
+        if (propertyConstValue != null) {
+          typeBuilder.addMethod(
+              addNotNullRelatedAnnotations(
+                      javaTypes,
+                      addJsonRelatedAnnotations(
+                          MethodSpec.methodBuilder(propertyName), propertyName))
+                  .addModifiers(Modifier.PUBLIC)
+                  .returns(String.class)
+                  .addStatement("return $S", propertyConstValue)
+                  .build());
+          continue;
+        }
 
         TypeName propertyType =
             propertySchema.writeJavaType(
@@ -211,10 +232,16 @@ record JsonSchemaContent(
     return className.canonicalName().equals(List.class.getCanonicalName());
   }
 
-  private void addJsonRelatedAnnotations(
-      ParameterSpec.Builder parameterBuilder, String propertyName) {
+  private void addJsonRelatedAnnotations(ParameterSpec.Builder builder, String propertyName) {
 
-    parameterBuilder.addAnnotation(
+    builder.addAnnotation(
+        AnnotationSpec.builder(JsonProperty.class).addMember("value", "$S", propertyName).build());
+  }
+
+  private MethodSpec.Builder addJsonRelatedAnnotations(
+      MethodSpec.Builder builder, String propertyName) {
+
+    return builder.addAnnotation(
         AnnotationSpec.builder(JsonProperty.class).addMember("value", "$S", propertyName).build());
   }
 
@@ -237,6 +264,14 @@ record JsonSchemaContent(
     } else if (!notNull && javaTypes.existsOnClassPath(ClassName.get(Nullable.class))) {
       parameterBuilder.addAnnotation(Nullable.class);
     }
+  }
+
+  private MethodSpec.Builder addNotNullRelatedAnnotations(
+      JavaTypes javaTypes, MethodSpec.Builder builder) {
+    if (!javaTypes.existsOnClassPath(ClassName.get(NonNull.class))) {
+      return builder;
+    }
+    return builder.addAnnotation(NonNull.class);
   }
 
   private void addRecordBuilderRelatedAnnotations(
