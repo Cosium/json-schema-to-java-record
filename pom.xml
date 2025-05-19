@@ -28,7 +28,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     <jackson.version>2.19.0</jackson.version>
-    <record-builder.version>45</record-builder.version>
+    <record-builder.version>47</record-builder.version>
 
     <slf4j.version>2.0.17</slf4j.version>
     <logback-classic.version>1.5.18</logback-classic.version>
