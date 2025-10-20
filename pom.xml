@@ -31,7 +31,7 @@
     <record-builder.version>49</record-builder.version>
 
     <slf4j.version>2.0.17</slf4j.version>
-    <logback-classic.version>1.5.19</logback-classic.version>
+    <logback-classic.version>1.5.20</logback-classic.version>
     <junit.version>6.0.0</junit.version>
     <assertj.version>3.27.6</assertj.version>
     <git-code-format-maven-plugin.version>5.4</git-code-format-maven-plugin.version>
