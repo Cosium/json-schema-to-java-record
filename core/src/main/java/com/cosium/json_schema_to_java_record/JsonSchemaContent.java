@@ -128,16 +128,24 @@ record JsonSchemaContent(
       return className;
     }
 
+    Modifier[] javaTypeVisibility =
+        switch (Optional.ofNullable(schemaConfiguration)
+            .map(JsonSchemaConfiguration::javaTypeVisibility)
+            .orElse(JsonSchemaConfiguration.JavaTypeVisibility.PUBLIC)) {
+          case PUBLIC -> new Modifier[] {Modifier.PUBLIC};
+          case DEFAULT -> new Modifier[0];
+        };
+
     TypeSpec.Builder typeBuilder;
     if (enumeration != null) {
-      typeBuilder = TypeSpec.enumBuilder(className).addModifiers(Modifier.PUBLIC);
+      typeBuilder = TypeSpec.enumBuilder(className).addModifiers(javaTypeVisibility);
       enumeration.stream().map(String::valueOf).forEach(typeBuilder::addEnumConstant);
     } else {
-      typeBuilder = TypeSpec.recordBuilder(className).addModifiers(Modifier.PUBLIC);
+      typeBuilder = TypeSpec.recordBuilder(className).addModifiers(javaTypeVisibility);
 
       MethodSpec.Builder constructorBuilder = MethodSpec.constructorBuilder();
       MethodSpec.Builder compactConstructorBuilder =
-          MethodSpec.compactConstructorBuilder().addModifiers(Modifier.PUBLIC);
+          MethodSpec.compactConstructorBuilder().addModifiers(javaTypeVisibility);
 
       for (Map.Entry<String, JsonSchemaContent> property : properties().entrySet()) {
 
@@ -151,7 +159,7 @@ record JsonSchemaContent(
                       javaTypes,
                       addJsonRelatedAnnotations(
                           MethodSpec.methodBuilder(propertyName), propertyName))
-                  .addModifiers(Modifier.PUBLIC)
+                  .addModifiers(javaTypeVisibility)
                   .returns(String.class)
                   .addStatement("return $S", propertyConstValue)
                   .build());

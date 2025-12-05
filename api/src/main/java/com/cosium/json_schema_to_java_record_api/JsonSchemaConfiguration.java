@@ -18,8 +18,15 @@ public @interface JsonSchemaConfiguration {
    */
   String javaTypeQualifiedName() default "";
 
+  JavaTypeVisibility javaTypeVisibility() default JavaTypeVisibility.PUBLIC;
+
   /**
    * @return The interfaces that the generated record must implement.
    */
   String[] javaInterfaceQualifiedNames() default {};
+
+  enum JavaTypeVisibility {
+    PUBLIC,
+    DEFAULT
+  }
 }
