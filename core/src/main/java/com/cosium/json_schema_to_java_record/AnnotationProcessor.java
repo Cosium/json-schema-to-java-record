@@ -2,14 +2,12 @@ package com.cosium.json_schema_to_java_record;
 
 import com.cosium.json_schema_to_java_record_api.GenerateRecordsFromJsonSchemas;
 import com.cosium.logging.annotation_processor.AbstractLoggingProcessor;
-import com.google.auto.service.AutoService;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
-import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.TypeElement;
@@ -20,7 +18,6 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Réda Housni Alaoui
  */
-@AutoService(Processor.class)
 public class AnnotationProcessor extends AbstractLoggingProcessor {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationProcessor.class);
