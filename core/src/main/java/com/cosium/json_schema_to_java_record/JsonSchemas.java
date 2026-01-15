@@ -3,14 +3,15 @@ package com.cosium.json_schema_to_java_record;
 import static java.util.Objects.requireNonNull;
 
 import com.cosium.json_schema_to_java_record_api.JsonSchemaFileLocation;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.zenwave360.jsonrefparser.$RefParser;
 import io.zenwave360.jsonrefparser.resolver.RefFormat;
 import io.zenwave360.jsonrefparser.resolver.Resolver;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * @author Réda Housni Alaoui
@@ -19,8 +20,7 @@ class JsonSchemas {
 
   private final ReadonlyClassPathResources classPathResources;
   private final Resolver resolver;
-  private final ObjectMapper objectMapper =
-      new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+  private final ObjectMapper objectMapper = new JsonMapper();
 
   public JsonSchemas(ReadonlyClassPathResources classPathResources) {
     this.classPathResources = requireNonNull(classPathResources);
@@ -44,7 +44,7 @@ class JsonSchemas {
               JsonSchemaContent.class);
       return new JsonSchema(fileLocation.relativeName(), jsonSchemaContent);
     } catch (IOException e) {
-      throw new RuntimeException(e);
+      throw new UncheckedIOException(e);
     }
   }
 }
