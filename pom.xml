@@ -33,7 +33,7 @@
     <slf4j.version>2.0.17</slf4j.version>
     <logback-classic.version>1.5.26</logback-classic.version>
     <junit.version>6.0.2</junit.version>
-    <assertj.version>3.27.6</assertj.version>
+    <assertj.version>3.27.7</assertj.version>
     <git-code-format-maven-plugin.version>5.4</git-code-format-maven-plugin.version>
   </properties>
 
