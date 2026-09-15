@@ -30,7 +30,7 @@
     <jackson.version>3.2.2</jackson.version>
     <record-builder.version>53</record-builder.version>
 
-    <slf4j.version>2.0.18</slf4j.version>
+    <slf4j.version>2.0.19</slf4j.version>
     <logback-classic.version>1.6.3</logback-classic.version>
     <junit.version>6.1.3</junit.version>
     <assertj.version>3.27.7</assertj.version>
