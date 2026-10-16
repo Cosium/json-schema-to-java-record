@@ -109,6 +109,8 @@ An annotation processor converting JSON schemas to java records.
 | array       |               |               | Immutable java.util.List |
 | number      |               | required      | double                   |
 | number      |               | non required  | java.lang.Double         |
+| integer     | int64         | required      | long                     |
+| integer     | int64         | non required  | java.lang.Long           |
 | integer     |               | required      | int                      |
 | integer     |               | non required  | java.lang.Integer        |
 | boolean     |               | required      | boolean                  |

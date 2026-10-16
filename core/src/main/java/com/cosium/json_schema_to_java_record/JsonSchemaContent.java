@@ -95,6 +95,12 @@ record JsonSchemaContent(
             yield ClassName.get(Double.class);
           }
           case INTEGER -> {
+            if ("int64".equals(format)) {
+              if (preferPrimitive) {
+                yield TypeName.LONG;
+              }
+              yield ClassName.get(Long.class);
+            }
             if (preferPrimitive) {
               yield TypeName.INT;
             }
